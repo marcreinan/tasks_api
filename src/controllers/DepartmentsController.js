@@ -1,13 +1,23 @@
+//Conexão ao Banco
 const connection = require('../database/connection');
 
 module.exports = {
-  //List Departments
+  //Listar Departments
   async index(req,res){
-    const departments = await connection('departments').select('*');
-    return res.json(departments);
+    if(req.headers["x-role"] === "admin"){
+      const { page = 1} = req.query;
+
+      const departments = await connection('departments').limit(5).offset((page - 1) * 5).select('*');
+      return res.json(departments);
+    }else{
+      return res.status(401).json({
+        error: 'Operation not authorized.'
+      });
+    }
   },
-  //Create Departments
+  //Criar Departments
   async create(req, res){
+    if(req.headers["x-role"] === "admin"){
       const {name} = req.body;
       const user_id = req.headers.authorization;
     
@@ -17,42 +27,39 @@ module.exports = {
       });
 
       return res.json({ id });
+    }else{
+      return res.status(401).json({
+        error: 'Operation not authorized.'
+      });
+    }
   },
-  //Edit Departments
+  //Editar Departments
   async edit(req, res){
+    if(req.headers["x-role"] === "admin"){
       const { name } = req.body;
       const { id } = req.params;
-      const user_id = req.headers.authorization;
 
-      const department = await connection('departments').where('id', id).select('*').first();
-
-      console.log(department.user_id);
-
-      if(department.user_id !== user_id){
-        return res.status(401).json({
-          error: 'Operation not permitted.'
-        })
-      }
       await connection('departments').update({
         name
       }).where('id', id);
         
       return res.status(204).send();
+    }else{
+      return res.status(401).json({
+        error: 'Operation not authorized.'
+      });
+    }
   },
   async delete(req, res){
-    const { id } = req.params;    
-    const user_id = req.headers.authorization;
-
-    const department = await connection('departments').where('id', id).select('*').first();
-
-    if(department.user_id !== user_id){
+    if(req.headers["x-role"] === "admin"){
+      const { id } = req.params;    
+  
+      await connection('departments').where('id', id).delete();      
+      return res.status(204).send();
+    }else{
       return res.status(401).json({
-        error: 'Operation not permitted.'
-      })
+        error: 'Operation not authorized.'
+      });
     }
-
-    await connection('departments').where('id', id).delete();
-    
-    return res.status(204).send();
   }
 }

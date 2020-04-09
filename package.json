@@ -5,13 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
+    "dev": "nodemon -r dotenv-safe/config src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Marc Reinan Gomes Dantas do Nascimento",
   "license": "ISC",
   "dependencies": {
+    "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.13",
+    "moment": "^2.24.0",
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {
