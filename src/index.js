@@ -7,4 +7,4 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 //Listen
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 3333);
