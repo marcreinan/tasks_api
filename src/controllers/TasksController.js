@@ -5,32 +5,44 @@ module.exports = {
   //List Tasks
   async index(req,res){
     if(req.headers["x-role"] === "admin" || req.headers["x-role"] === "agent"){
-      const { type, term } = req.params
-      const { page = 1, order = 'asc'} = req.query;
+      let { type, term } = req.params
+      let { page = 1, order = 'asc', order_by = 'id'} = req.query;
 
-      let tasks;
+      let tasks, term2;
 
       switch(type){
         case 'created_by':
-          tasks = await connection('tasks').orderBy('created_at', order).where('created_by',term).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).where('created_by',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         case 'responsible':
-          tasks = await connection('tasks').orderBy('created_at', order).where('responsible_id',term).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).where('responsible_id',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         case 'department':
-          tasks = await connection('tasks').orderBy('created_at', order).where('department_id',term).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).where('department_id',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         case 'status':
-          tasks = await connection('tasks').orderBy('created_at', order).where('status',term).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).where('status',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         case 'description':
-          tasks = await connection('tasks').orderBy('created_at', order).where('description', 'like', `%${term}%`).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).where('description', 'like', `%${term}%`).limit(5).offset((page - 1) * 5).select('*');
+          break;
+        case 'created_at':
+          term2 = moment(term).add(1,'d').format('YYYY-MM-DD HH:mm:ss');
+          tasks = await connection('tasks').orderBy(order_by, order).whereBetween('created_at', [term, term2]).limit(5).offset((page - 1) * 5).select('*');
+          break;
+        case 'started_at':
+          term2 = moment(term).add(1,'d').format('YYYY-MM-DD HH:mm:ss');
+          tasks = await connection('tasks').orderBy(order_by, order).whereBetween('started_at', [term, term2]).limit(5).offset((page - 1) * 5).select('*');
+          break;
+        case 'finished_at':
+          term2 = moment(term).add(1,'d').format('YYYY-MM-DD HH:mm:ss');
+          tasks = await connection('tasks').orderBy(order_by, order).whereBetween('finished_at', [term, term2]).limit(5).offset((page - 1) * 5).select('*');
           break;
         case 'type':
-          tasks = await connection('tasks').orderBy('created_at', order).where('type_id',term).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).where('type_id',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         default:
-          tasks = await connection('tasks').orderBy('created_at', order).limit(5).offset((page - 1) * 5).select('*');
+          tasks = await connection('tasks').orderBy(order_by, order).limit(5).offset((page - 1) * 5).select('*');
           break;
       }
       return res.json(tasks);
@@ -96,21 +108,6 @@ module.exports = {
   async delete(req, res){
     if(req.headers["x-role"] === "admin" || req.headers["x-role"] === "agent"){
       const { id } = req.params;    
-      const user_id = req.headers.authorization;
-  
-      const task = await connection('tasks').where('id', id).select('*').first();
-  
-      try{
-        if(task.user_id !== user_id){
-          return res.status(401).json({
-            error: 'Operation not permitted.'
-          });
-        }
-      }catch(err){
-        return res.status(406).json({
-          error: 'Task not found.'
-        });
-      }
   
       await connection('tasks').where('id', id).delete();
       

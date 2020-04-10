@@ -7,6 +7,7 @@ const DepartmentsController = require('./controllers/DepartmentsController');
 const TypesTasksController = require('./controllers/TypesTasksController');
 const TasksController = require('./controllers/TasksController');
 const ProfileController = require('./controllers/ProfileController');
+const IndicatorsController = require('./controllers/IndicatorsController');
 
 const routes = express.Router();
 
@@ -23,6 +24,10 @@ function verifyJWT(req, res, next){
   });
 }
 
+  routes.get('/', function (req, res) {
+    res.send('Tasks API - Online');
+  });
+  
   //Session
   routes.post('/api/v1/sessions', SessionsController.create);
   //Create First Admin
@@ -60,8 +65,9 @@ function verifyJWT(req, res, next){
   
   //List Tasks
   routes.get('/api/v1/tasks', verifyJWT, (req, res, next) => { TasksController.index(req, res)});
-  routes.get('/api/v1/tasks/:type/:term', verifyJWT, (req, res, next) => { TasksController.index(req, res)});
-  //Create Tasks
+  routes.get('/api/v1/tasks/:type/:term/', verifyJWT, (req, res, next) => { TasksController.index(req, res)});
+  routes.get('/api/v1/tasks/:type/:term/:term2', verifyJWT, (req, res, next) => { TasksController.index(req, res)});
+ //Create Tasks
   routes.post('/api/v1/tasks', verifyJWT, (req, res, next) => { TasksController.create(req, res)});
   //Edit Tasks
   routes.put('/api/v1/tasks/:id', verifyJWT, (req, res, next) => { TasksController.edit(req, res)});
@@ -71,7 +77,8 @@ function verifyJWT(req, res, next){
   //List Tasks from Users
   routes.get('/api/v1/profile/:type', verifyJWT, (req, res, next) => { ProfileController.index(req, res)});
   
-
-
+  //List Tasks from Users
+  routes.get('/api/v1/indicators/:type/:id/:term', verifyJWT, (req, res, next) => { IndicatorsController.index(req, res)});
+  
 
 module.exports = routes;

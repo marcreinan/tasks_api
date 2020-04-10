@@ -6,5 +6,9 @@ const app = express();
 //Setando json e as rotas
 app.use(express.json());
 app.use(routes);
+
+const port = process.env.PORT || 3333;
 //Listen
-app.listen(process.env.PORT || 3333);
+app.listen(port, function () {
+  console.log(`Tasks API - listening on port ${port}!`);
+});
