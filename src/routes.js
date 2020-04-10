@@ -6,7 +6,6 @@ const UsersController = require('./controllers/UsersController');
 const DepartmentsController = require('./controllers/DepartmentsController');
 const TypesTasksController = require('./controllers/TypesTasksController');
 const TasksController = require('./controllers/TasksController');
-const ProfileController = require('./controllers/ProfileController');
 const IndicatorsController = require('./controllers/IndicatorsController');
 
 const routes = express.Router();
@@ -73,9 +72,6 @@ function verifyJWT(req, res, next){
   routes.put('/api/v1/tasks/:id', verifyJWT, (req, res, next) => { TasksController.edit(req, res)});
   //Delete Tasks
   routes.delete('/api/v1/tasks/:id', verifyJWT, (req, res, next) => { TasksController.delete(req, res)});
-  
-  //List Tasks from Users
-  routes.get('/api/v1/profile/:type', verifyJWT, (req, res, next) => { ProfileController.index(req, res)});
   
   //List Tasks from Users
   routes.get('/api/v1/indicators/:type/:id/:term', verifyJWT, (req, res, next) => { IndicatorsController.index(req, res)});
