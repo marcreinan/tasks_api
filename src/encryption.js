@@ -1,8 +1,18 @@
+/*
+* Encryption - Criptografa e descriptografa uma string, responsavel por gerar as 
+* hash das senhas dos users 
+*
+* @author Marc Reinan Gomes Dantas do Nascimento
+*/
+
 'use strict';
-const crypto = require('crypto');
+const crypto = require('crypto'); // Import Crypto
+const ENCRYPTION_KEY = process.env.SECRET; //Pega a chave de encriptação
 
-const ENCRYPTION_KEY = process.env.SECRET; 
-
+/*
+* encrypt - Encripta uma string e retorna o hash correspondente
+*
+*/
 function encrypt(text) {
   let iv = process.env.IV;
   let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
