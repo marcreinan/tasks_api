@@ -266,22 +266,22 @@ Exemplo de resposta: /tasks?id=3
   "finished_at": null
 }
 ```
-- **GET /tasks/:type/:term {page}** - Lista todos as tarefas de acordo com tipo(type) e o termo(informado), a resposta é paginada e exibe 5 resultados por vez, para acessar a próxima página inclua o parametro page na chamada ex: /tasks?page=2 
-Os tipos{:type} possiveis são: created_by, responsible_id, department, status, description, created_at, started_at, finished_at, type_id
-Os termos podem ser o id, string e datas, dependendo do tipo utilizado, ver abaixo os exemplos de chamadas.
-Resposta: 200 - {"id": id da tarefa,"description": descrição da tarefa,"type_id": id do tipo da tarefa associado,"created_by":id do usuário que criou a tarefa,"responsible_id": id do usuário responsável pela tarefa,"department_id": id do departamento associado a tarefa,"status": código de status da tarefa 1- aberto 2- em andamento 3- finalizado,"created_at": data e hora da criação,"started_at": data e hora de inicio,"finished_at": data e hora de finalização}
+- **GET /tasks/:type/:term {page}** - Lista todos as tarefas de acordo com tipo(type) e o termo(informado), a resposta é paginada e exibe 5 resultados por vez, para acessar a próxima página inclua o parametro page na chamada ex: /tasks?page=2  
+Os tipos{:type} possiveis são: **created_by, responsible_id, department, status, description, created_at, started_at, finished_at, type_id**  
+Os termos podem ser o **id, string e datas**, dependendo do tipo utilizado, ver abaixo os exemplos de chamadas.  
+Resposta: 200 - {"id": id da tarefa,"description": descrição da tarefa,"type_id": id do tipo da tarefa associado,"created_by":id do usuário que criou a tarefa,"responsible_id": id do usuário responsável pela tarefa,"department_id": id do departamento associado a tarefa,"status": código de status da tarefa 1- aberto 2- em andamento 3- finalizado,"created_at": data e hora da criação,"started_at": data e hora de inicio,"finished_at": data e hora de finalização}  
 
-Exemplos de requisição:
-**/tasks/created_by/eb72b520** - type: created_by | term: id do usuário que criou a tarefa
-**/tasks/responsible_id/08359243** - type: responsible_id | term: id do usuário responsável pela tarefa
-**/tasks/department/2** - type: department | term: id do departamento da tarefa
-**/tasks/status/2** - type: status | term: 1 (em aberto), 2 (em andamento), 3 (finalizados)
-**/tasks/type_id/2** - type: type_id | term: id do tipo de tarefa anexado a tarefa
-**/tasks/description/lorem** - type: description | term: string, trecho de texto que esteja na descrição
-**/tasks/created_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de criação 
-**/tasks/started_at/2020-04-09** - type: started_at | term: date(YYYY-MM-DD) data de inicio 
-**/tasks/finished_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de finalização
-
+Exemplos de requisição:  
+**/tasks/created_by/eb72b520** - type: created_by | term: id do usuário que criou a tarefa  
+**/tasks/responsible_id/08359243** - type: responsible_id | term: id do usuário responsável pela tarefa  
+**/tasks/department/2** - type: department | term: id do departamento da tarefa  
+**/tasks/status/2** - type: status | term: 1 (em aberto), 2 (em andamento), 3 (finalizados)  
+**/tasks/type_id/2** - type: type_id | term: id do tipo de tarefa anexado a tarefa  
+**/tasks/description/lorem** - type: description | term: string, trecho de texto que esteja na descrição  
+**/tasks/created_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de criação  
+**/tasks/started_at/2020-04-09** - type: started_at | term: date(YYYY-MM-DD) data de inicio  
+**/tasks/finished_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de finalização  
+  
 - **POST /tasks {description, type_id, responsible_id, department_id}** - Cria uma nova tarefa com os parametros informados
 Resposta: 200 - {id: id gerado para a nova tarefa}
 Exemplo de requisição:
@@ -317,14 +317,15 @@ Exemplo de requisição: /tasks/19
 
 - **GET /indicators/:type/:id/:term {unity, status}** - Lista os indicadores dos departamentos e dos usuários de acordo com o tipo(type), o id(id do usuário ou do departamento) e o termo. por padrão os indicadores retornam as tarefas finalizadas (status = 3), caso queira indicadores de outras status basta incluir o parametro status na chamada ex: /indicators/departments/2/tasks?status=2. por padrão a unidade da media de desempenho é contada em dias(days), para realizar o cálculo com outras unidades inclua o parametro unity na chamada ex: /indicators/departments/2/avgcreatedstarted?unity=hours
 
-  Os tipos{:type} possiveis são: departments, user
-  O id(:id) é referente ao departamento ou ao usuário de acordo com o tipo(type) informado
-  Os termos(:term) possiveis são: tasks, avgcreatedstarted, avgstartedfinished
-  As unidades(?unity) possiveis são: years, months, weeks, days, hours, minutes, and seconds
-  Os status(?status) possiveis são: 1 (em aberto), 2 (em andamento) e 3 (finalizado)
+  Os tipos{:type} possiveis são: ```sh departments, user ``` 
+  O id(:id) é referente ao departamento ou ao usuário de acordo com o tipo(type) informado  
+  Os termos(:term) possiveis são: ```sh tasks, avgcreatedstarted, avgstartedfinished ``` 
+  As unidades(?unity) possiveis são: ```sh years, months, weeks, days, hours, minutes, and seconds ```  
+  Os status(?status) possiveis são: ```sh 1 (em aberto), 2 (em andamento) e 3 (finalizado) ```
 
-Respostas: 200 - {"department_id": id do departamento,"responsible_id": id do responsavel da tarefa,"status": status das tarefas,"total_tasks": numero de tarefa, "avg_created_started": media entre criação e inicio,"avg_started_finished": media entre inicio e finalização, "unity": unidade de medida da média(padrão dias)}
-Exemplos de requisição: **/indicators/departments/2/tasks**
+  Respostas: 200 - {"department_id": id do departamento,"responsible_id": id do responsavel da tarefa,"status": status das tarefas,"total_tasks": numero de tarefa, "avg_created_started": media entre criação e inicio,"avg_started_finished": media entre inicio e finalização, "unity": unidade de medida da média(padrão dias)}  
+  
+  Exemplos de requisição: **/indicators/departments/2/tasks**
 ```sh
 {
   "department_id": "2",
