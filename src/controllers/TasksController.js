@@ -23,7 +23,7 @@ module.exports = {
         case 'responsible_id': //pega as tarefas pelo 'responsible_id'
           tasks = await connection('tasks').orderBy(order_by, order).where('responsible_id',term).limit(5).offset((page - 1) * 5).select('*');
           break;
-        case 'department': //pega as tarefas pelo 'department'
+        case 'department_id': //pega as tarefas pelo 'department'
           tasks = await connection('tasks').orderBy(order_by, order).where('department_id',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         case 'status': //pega as tarefas pelo 'status'

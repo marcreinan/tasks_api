@@ -220,7 +220,11 @@ Exemplo de requisição: /departments/3
 
 ### Rota Tasks
 
-- **GET /tasks {id, page}** - Lista todos as tarefas, a resposta é paginada e exibe 5 resultados por vez, para acessar a próxima página inclua o parametro page na chamada ex: /tasks?page=2 para listar uma unica tarefa inclua o parametro id contendo o id a ser listado ex: /tasks?id=1
+- **GET /tasks {id, page, order_by, order}** - Lista todos as tarefas, a resposta é paginada e exibe 5 resultados por vez, para acessar a próxima página inclua o parametro page na chamada ex: /tasks?page=2 para listar uma unica tarefa inclua o parametro id contendo o id a ser listado ex: /tasks?id=1 Por padrão os registros são ordenados pelo id, para alterar o tipo da ordenação inclua o parametro order_by ex: /tasks?order_by=status para alterar a ordem(crescente ou descrescente) dos registros inclua o parametro order ex: /tasks?order=asc, os valores podem ser combinados para melhorar o filtro de registros ex: /tasks?order_by=status&order=asc  
+  
+Os valores possiveis para o order_by são: **created_by, responsible_id, department_id, status, description, created_at, started_at, finished_at, type_id** 
+Os valores possiveis para o order são: **asc, desc**
+
 Resposta: 200 - {"id": id da tarefa,"description": descrição da tarefa,"type_id": id do tipo da tarefa associado,"created_by":id do usuário que criou a tarefa,"responsible_id": id do usuário responsável pela tarefa,"department_id": id do departamento associado a tarefa,"status": código de status da tarefa 1- aberto 2- em andamento 3- finalizado,"created_at": data e hora da criação,"started_at": data e hora de inicio,"finished_at": data e hora de finalização}
 Exemplo de resposta: /tasks
 ```sh
@@ -266,21 +270,25 @@ Exemplo de resposta: /tasks?id=3
   "finished_at": null
 }
 ```
-- **GET /tasks/:type/:term {page}** - Lista todos as tarefas de acordo com tipo(type) e o termo(informado), a resposta é paginada e exibe 5 resultados por vez, para acessar a próxima página inclua o parametro page na chamada ex: /tasks?page=2  
-Os tipos{:type} possiveis são: **created_by, responsible_id, department, status, description, created_at, started_at, finished_at, type_id**  
+- **GET /tasks/:type/:term {page}** - Lista todos as tarefas de acordo com tipo(type) e o termo(term) informado ex: /tasks/created_by/eb72b520, a resposta é paginada e exibe 5 resultados por vez, para acessar a próxima página inclua o parametro page na chamada ex: /tasks?page=2  
+Por padrão os registros são ordenados pelo id, para alterar o tipo da ordenação inclua o parametro order_by ex: /tasks/created_by/eb72b520?order_by=status para alterar a ordem(crescente ou descrescente) dos registros inclua o parametro order ex: /tasks/created_by/eb72b520?order=asc, os valores podem ser combinados para melhorar o filtro de registros ex: /tasks/created_by/eb72b520?order_by=status&order=asc  
+  
+Os valores possiveis para o order_by são: **created_by, responsible_id, department_id, status, description, created_at, started_at, finished_at, type_id** 
+Os valores possiveis para o order são: **asc, desc**  
+Os tipos{:type} possiveis são: **created_by, responsible_id, department_id, status, description, created_at, started_at, finished_at, type_id**  
 Os termos podem ser o **id, string e datas**, dependendo do tipo utilizado, ver abaixo os exemplos de chamadas.  
 Resposta: 200 - {"id": id da tarefa,"description": descrição da tarefa,"type_id": id do tipo da tarefa associado,"created_by":id do usuário que criou a tarefa,"responsible_id": id do usuário responsável pela tarefa,"department_id": id do departamento associado a tarefa,"status": código de status da tarefa 1- aberto 2- em andamento 3- finalizado,"created_at": data e hora da criação,"started_at": data e hora de inicio,"finished_at": data e hora de finalização}  
 
-Exemplos de requisição:  
-**/tasks/created_by/eb72b520** - type: created_by | term: id do usuário que criou a tarefa  
-**/tasks/responsible_id/08359243** - type: responsible_id | term: id do usuário responsável pela tarefa  
-**/tasks/department/2** - type: department | term: id do departamento da tarefa  
-**/tasks/status/2** - type: status | term: 1 (em aberto), 2 (em andamento), 3 (finalizados)  
-**/tasks/type_id/2** - type: type_id | term: id do tipo de tarefa anexado a tarefa  
-**/tasks/description/lorem** - type: description | term: string, trecho de texto que esteja na descrição  
-**/tasks/created_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de criação  
-**/tasks/started_at/2020-04-09** - type: started_at | term: date(YYYY-MM-DD) data de inicio  
-**/tasks/finished_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de finalização  
+  Exemplos de requisição:  
+  **/tasks/created_by/eb72b520** - type: created_by | term: id do usuário que criou a tarefa  
+  **/tasks/responsible_id/08359243** - type: responsible_id | term: id do usuário responsável pela tarefa  
+  **/tasks/department/2** - type: department | term: id do departamento da tarefa  
+  **/tasks/status/2** - type: status | term: 1 (em aberto), 2 (em andamento), 3 (finalizados)  
+  **/tasks/type_id/2** - type: type_id | term: id do tipo de tarefa anexado a tarefa  
+  **/tasks/description/lorem** - type: description | term: string, trecho de texto que esteja na descrição  
+  **/tasks/created_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de criação  
+  **/tasks/started_at/2020-04-09** - type: started_at | term: date(YYYY-MM-DD) data de inicio  
+  **/tasks/finished_at/2020-04-09** - type: created_at | term: date(YYYY-MM-DD) data de finalização  
   
 - **POST /tasks {description, type_id, responsible_id, department_id}** - Cria uma nova tarefa com os parametros informados
 Resposta: 200 - {id: id gerado para a nova tarefa}
