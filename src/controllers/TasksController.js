@@ -47,7 +47,7 @@ module.exports = {
           term2 = moment(term).add(23,'hours').add(59,'minutes').add(59,'seconds').format('YYYY-MM-DD HH:mm:ss');
           tasks = await connection('tasks').orderBy(order_by, order).whereBetween('finished_at', [term, term2]).limit(5).offset((page - 1) * 5).select('*');
           break;
-        case 'type': //pega as tarefas pelo tipo da tarefa
+        case 'type_id': //pega as tarefas pelo tipo da tarefa
           tasks = await connection('tasks').orderBy(order_by, order).where('type_id',term).limit(5).offset((page - 1) * 5).select('*');
           break;
         default: //caso padrão
