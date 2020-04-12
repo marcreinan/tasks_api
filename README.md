@@ -1,7 +1,9 @@
-# tasks_api
+# Tasks_api
 Tasks_API v1.0.0
 
 API para cadastramento de tarefas e consulta de indicadores(nº de tarefas concluidas, tempo médio, etc)
+
+Link para a API online: https://blooming-harbor-88519.herokuapp.com/
 
 ## Rotas
 É necessário enviar o JWT em todas as rotas(exceto a /sessions) através do header[x-access-token].
